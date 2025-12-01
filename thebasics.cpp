@@ -22,12 +22,12 @@ int main() {
     const int year = tm_struct.tm_year + 1900;
     
     int userAge;
-    bool validNum = false;
+    bool validInput = false;
     cout << "It is the " << dayOfYear << "th day of the year" << endl;
     cout << "We are " << fixed << setprecision(0)<< yearPercentage << "% through " << year <<"!" << endl;
     cout << "But the way...how old are you? \n";
     
-    while (!validNum) {
+    while (!validInput) {
     if (!(cin >> userAge)) {
         // Input was not a number
         cin.clear(); // clear error flags
@@ -39,17 +39,38 @@ int main() {
     if (userAge <= 0 || userAge >= 150) {
         cout << "You are not real. Let's be serious here.\n";
     } else {
-        validNum = true;
+        validInput = true;
     }
 }
     cout << "Oh! Since you're " << userAge << " years old, you must have been born in " << year - userAge << " approximately" << endl;
     // of course I know to increment before giving the goods to the output! 
     cout << "Soon you'll be " << ++userAge << ". Exciting!" << endl;
     string userName;
-    cout << "What's your name by the way?\n";
-    cin >> userName;
+    validInput = false;
+
+    while (!validInput){
+        cout << "What's your name by the way?\n";
+        cin >> userName; // alternatively use getline(cin, userName) to get the full line including spaces...but I want first names only
+        bool lettersOnly = true;
+        for (char c : userName) {
+            if (!isalpha(c) && c != ' ' && c != '-') {
+                lettersOnly = false;
+                break;
+            }
+        }
+        if (!lettersOnly) {
+            cout << "uh...that doesn't look like a real name. ";
+        } else {
+            validInput = true;
+        }
+    }
+    
     cout << "Well, nice to meet you, " << userName << endl;
-    cout << "Your name is " << userName.length() << " characters long. Interesting." << endl;
+    if (userName.length() > 1) {
+        cout << "Your name is " << userName.length() << " characters long. Interesting." << endl;
+        cout << "The second letter of your name is " << userName[1] << endl;
+        
+    }
     
 
     return 0;
