@@ -6,10 +6,12 @@ using namespace std; /* why use many word when few word do trick? */
 #include <string>
 #include <limits>
 
+// of course I can write functions too 
 int define_ordinal(int dayOfYr) {
     string rt_val = to_string(dayOfYr);
-    // I want the last digit, which will always be 2 in index
-    rt_val = rt_val[2];
+    // I want the last digit
+    int size = rt_val.length();
+    rt_val = rt_val[size - 1];
     cout << rt_val << " << rt val\n";
     return stoi(rt_val);
 }
@@ -45,7 +47,6 @@ int main() {
         cronString = "rd";
     }
 
-    // define_ordinal(dayOfYear);
     cout << "It is the " << dayOfYear << cronString << " day of the year" << endl;
     cout << "We are " << fixed << setprecision(0)<< yearPercentage << "% through " << year <<"!" << endl;
     cout << "But the way...how old are you? \n";
