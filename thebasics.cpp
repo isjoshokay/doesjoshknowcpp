@@ -5,7 +5,7 @@ using namespace std; /* why use many word when few word do trick? */
 #include <iomanip> // for manipulating outputs (decimals)
 #include <string>
 #include <limits>
-
+#include <cctype>
 // of course I can write functions too 
 string ordinal_suffix(int n) {
     int last_two = n % 100;
@@ -32,7 +32,7 @@ int main() {
 
     // Converting the time into local time structure using tm
     tm tm_struct = *std::localtime(&t_c);
-    int dayOfYear = tm_struct.tm_yday;
+    int dayOfYear = tm_struct.tm_yday + 1; // (Jan 1 is 0th day of the yr)
     double yearPercentage = ((double)dayOfYear/365.0)*100;
     const int year = tm_struct.tm_year + 1900;
     
@@ -45,20 +45,31 @@ int main() {
     cout << "But the way...how old are you? \n";
     
     while (!validInput) {
-    if (!(cin >> userAge)) {
-        // Input was not a number
-        cin.clear(); // clear error flags
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // throw away bad input
-        cout << "uh...can you enter a real number...please?\n";
-        continue;
-    }
+        string temp;
+        cout << "Please enter your age: ";
+        cin >> temp;
 
-    if (userAge <= 0 || userAge >= 150) {
-        cout << "You are not real. Let's be serious here.\n";
-    } else {
-        validInput = true;
+        bool allDigits = true;
+        for (char c : temp) {
+            if (!isdigit(c)) {
+                allDigits = false;
+                break;
+            }
+        }
+
+        if (!allDigits) {
+            cout << "uh...can you enter a real number...please?\n";
+            continue;
+        }
+
+        userAge = stoi(temp);
+
+        if (userAge <= 0 || userAge >= 150) {
+            cout << "You are not real. Let's be serious here.\n";
+        } else {
+            validInput = true;
+        }
     }
-}
     cout << "Oh! Since you're " << userAge << " years old, you must have been born in " << year - userAge << " approximately" << endl;
     // of course I know to increment before giving the goods to the output! 
     cout << "Soon you'll be " << ++userAge << ". Exciting!" << endl;
@@ -70,7 +81,7 @@ int main() {
         cin >> userName; // alternatively use getline(cin, userName) to get the full line including spaces...but I want first names only
         bool lettersOnly = true;
         for (char c : userName) {
-            if (!isalpha(c) && c != ' ' && c != '-') {
+            if (!isalpha(c) && c != '-') {
                 lettersOnly = false;
                 break;
             }
